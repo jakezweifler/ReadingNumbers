@@ -12,7 +12,16 @@ class Tester {
         System.out.println(m3.getMultiplierMatrix().length);
 
         ImageGetter.printNicely(m3.getMultiplierMatrix());
-        m3.genAndKill();
+
+        for(int x = 0; x < 10000; x++) {
+            m3.genAndKill();
+            if(x%100 == 0) {
+                System.out.println((x/100) + "% done.");
+            }
+
+        }
+        m3.saveToDrive();
+
         ImageGetter.printNicely(m3.getMultiplierMatrix());
 
 

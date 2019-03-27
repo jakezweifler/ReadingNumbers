@@ -104,4 +104,16 @@ public class MultiplierMatrix {
         return copy;
     }
 
+    public void saveToDrive() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(fileLocation), multiplierMatrix);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
+
+
