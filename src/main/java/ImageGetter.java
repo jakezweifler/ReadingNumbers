@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 public class ImageGetter {
 
@@ -26,14 +23,20 @@ public class ImageGetter {
         //1 is black, 0 is white
 
 
-        int[][] blackIndexes = getFakeImage();
+        int[][] blackIndexes = getRandomFakeImage();
         for(int x = 0; x < 30; x++) {
             System.out.println(Arrays.toString(blackIndexes[x]));
         }
 
     }
 
-    public static int[][] getNumberImage(int number) throws IOException {
+    public static void printNicely(double[][] d) {
+        for(int x = 0; x < d.length; x++) {
+            System.out.println(Arrays.toString(d[x]));
+        }
+    }
+
+    public static int[][] getRandomNumberImage(int number) throws IOException {
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/";
         filePath += number + "/" + number + ".0" + (int) (Math.random()*11 + 1) + ".jpg";
         System.out.println(filePath);
@@ -51,7 +54,7 @@ public class ImageGetter {
 
 
 
-    public static int[][] getFakeImage() throws IOException{
+    public static int[][] getRandomFakeImage() throws IOException{
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/Fakes/fake";
         filePath += (int) (Math.random()*15 + 1) + ".jpg";
 
