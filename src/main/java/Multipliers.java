@@ -91,5 +91,14 @@ public class Multipliers {
         return Math.pow(Math.E, input) / (1 + Math.pow(Math.E, input));
     }
 
+    public static double[][] copyArray(double[][] b) {
+        double[][] copy = new double[b.length][b[0].length];
+        for (int i = 0; i < b.length; i++) {
+            for (int j = 0; j < b[0].length; j++) {
+                copy[i][j] = b[i][j];
+            }
+        }
+        return copy;
+    }
 
 }
