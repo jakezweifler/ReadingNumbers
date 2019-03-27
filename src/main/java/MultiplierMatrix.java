@@ -3,7 +3,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 
-public class Multipliers {
+public class MultiplierMatrix {
 
     private double[][] multiplierMatrix;
     private double bias;
@@ -11,12 +11,12 @@ public class Multipliers {
     private final String folderLocation = "/home/jake/ReadingNumbers/src/main/java/Matrices/MultiplierMatrix";
     private String fileLocation;
 
-    public Multipliers(int number) {
+    public MultiplierMatrix(int number) {
         this.number = number;
         fileLocation = folderLocation + number + ".json";
         ObjectMapper mapper = new ObjectMapper();
         try {
-            double[][] multiplierMatrix = mapper.readValue(new File(fileLocation), double[][].class);
+            multiplierMatrix = mapper.readValue(new File(fileLocation), double[][].class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,13 +41,12 @@ public class Multipliers {
 
 
     //methods for optimization
-    public double[][] randomMutation(double[][] inputMatrix) {
+    public static void randomMutation(double[][] inputMatrix) {
         for (int x = 0; x < 10; x++) {
             int xVal = (int) (Math.random() * 30);
             int yVal = (int) (Math.random() * 30);
             inputMatrix[xVal][yVal] += Math.random() - 0.5;
         }
-        return inputMatrix;
     }
 
 
@@ -64,7 +63,7 @@ public class Multipliers {
     public static double checkAccuracy(double[][] multipliers, double bias, int number) throws IOException{
         double productSum = 0;
         for(int x = 0; x < 20; x++) {
-            productSum += Math.random() > 0.5? compareToNumber(multipliers, bias, number) : compareToFake(multipliers, bias);
+            productSum += (Math.random() > 0.5)? compareToNumber(multipliers, bias, number) : compareToFake(multipliers, bias);
         }
         return productSum;
     }
@@ -83,8 +82,12 @@ public class Multipliers {
     }
 
 
-    public double[][] gen100AndKill() {
-        return multiplierMatrix;
+    public void genAndKill() throws IOException{
+        double[][] origionalMatrix = copyArray(multiplierMatrix);
+        double[][] mutationMatrix = copyArray(multiplierMatrix);
+        randomMutation(mutationMatrix);
+        multiplierMatrix = checkAccuracy(mutationMatrix, 0, number) > checkAccuracy(origionalMatrix, 0, number)?
+                mutationMatrix : origionalMatrix;
     }
 
     public static double sigmoidFunction(double input) {

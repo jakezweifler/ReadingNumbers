@@ -38,8 +38,8 @@ public class ImageGetter {
 
     public static int[][] getRandomNumberImage(int number) throws IOException {
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/";
-        filePath += number + "/" + number + ".0" + (int) (Math.random()*11 + 1) + ".jpg";
-        System.out.println(filePath);
+        filePath += number + "/" + number + "." + (int) (Math.random()*11 + 1) + ".jpg";
+        //System.out.println(filePath);
         BufferedImage img = ImageIO.read(new File(filePath));
 
         int[][] blackIndexes = new int[30][30];
@@ -57,7 +57,7 @@ public class ImageGetter {
     public static int[][] getRandomFakeImage() throws IOException{
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/Fakes/fake";
         filePath += (int) (Math.random()*15 + 1) + ".jpg";
-
+        //System.out.println(filePath);
         BufferedImage fakeImage = ImageIO.read(new File(filePath));
 
         int[][] outPutIndices = new int[30][30];
