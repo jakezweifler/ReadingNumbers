@@ -42,6 +42,11 @@ public class ImageGetter {
         }
     }
 
+    public static void printNicely(String[][] d) {
+        for(int x = 0; x < d.length; x++) {
+            System.out.println(Arrays.toString(d[x]));
+        }
+    }
 
     public static int[][] getRandomNumberImage(int number) throws IOException {
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/";
@@ -51,6 +56,22 @@ public class ImageGetter {
 
         int[][] blackIndexes = new int[30][30];
 
+        for(int x = 0; x < 30; x++) {
+            for(int y = 0; y < 30; y++) {
+                blackIndexes[x][y] = blackIndex(new Color(img.getRGB(y, x)));
+            }
+        }
+        return blackIndexes;
+    }
+
+
+    public static int[][] getNumberImage(int number, int fileNumber) throws IOException {
+        String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/";
+        filePath += number + "/" + number + "." + fileNumber + ".jpg";
+        //System.out.println(filePath);
+        BufferedImage img = ImageIO.read(new File(filePath));
+
+        int[][] blackIndexes = new int[30][30];
         for(int x = 0; x < 30; x++) {
             for(int y = 0; y < 30; y++) {
                 blackIndexes[x][y] = blackIndex(new Color(img.getRGB(y, x)));
@@ -76,6 +97,23 @@ public class ImageGetter {
         }
         return outPutIndices;
     }
+
+    public static int[][] getFakeImage(int fileNumber) throws IOException{
+        String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/Fakes/fake" + fileNumber + ".jpg";
+
+        //System.out.println(filePath);
+        BufferedImage fakeImage = ImageIO.read(new File(filePath));
+
+        int[][] outPutIndices = new int[30][30];
+        for(int a = 0; a < 30; a ++) {
+            for(int b = 0; b < 30; b++) {
+                outPutIndices[a][b] = blackIndex((new Color(fakeImage.getRGB(b,a))));
+            }
+        }
+        return outPutIndices;
+    }
+
+
 
     public static int blackIndex(Color c) {
         int redIndex = c.getRed();

@@ -52,14 +52,14 @@ public class MultiplierMatrix {
 
     //methods for optimization
     public static void randomMutation(double[][] inputMatrix) {
-        for (int x = 0; x < 100; x++) {
+        for (int x = 0; x < 50; x++) {
             int xVal = (int) (Math.random() * 30);
             int yVal = (int) (Math.random() * 30);
-            if(Math.abs(inputMatrix[xVal][yVal]) > 10) {
+            if(Math.abs(inputMatrix[xVal][yVal]) > 15) {
                 x--;
             }
             else {
-                inputMatrix[xVal][yVal] = (Math.random() - 0.5);
+                inputMatrix[xVal][yVal] += (Math.random() - 0.5);
             }
         }
     }
@@ -95,20 +95,28 @@ public class MultiplierMatrix {
     public static double compareToNumber(double[][] multipliers, double bias, int number) throws IOException {
         double productSum = getProduct(multipliers, ImageGetter.getRandomNumberImage(number));
         //System.out.println(productSum);
-        productSum = sigmoidFunction(productSum - bias);
-        return 1 - productSum;
+
+        return productSum;
+
+        //Using sigmoid function:
+            //productSum = sigmoidFunction(productSum - bias);
+            //return 1 - productSum;
     }
 
     public static double compareToFake(double[][] multipliers, double bias) throws IOException{
         double productSum = getProduct(multipliers, ImageGetter.getRandomFakeImage());
         //System.out.println(productSum);
-        productSum = sigmoidFunction(productSum - bias);
-        return productSum - 0;
+
+        return productSum;
+
+        //Using sigmoid function:
+            //productSum = sigmoidFunction(productSum - bias);
+            //return productSum - 0;
     }
 
-    public static double getNumberIndex(int[][] image, double[][] multipliers, double bias) throws IOException{
+    public static double getNumberIndex(int[][] image, double[][] multipliers, double bias, boolean rawValue){
         double productSum = getProduct(multipliers, image);
-        productSum = sigmoidFunction(productSum - bias);
+        productSum = rawValue? productSum : sigmoidFunction(productSum - bias);
         return productSum;
     }
 
@@ -120,10 +128,10 @@ public class MultiplierMatrix {
         double mutationBias = bias + Math.random() - 0.5;
         randomMutation(mutationMatrix);
 
-        if((checkTrueAccuracy(mutationMatrix, mutationBias, number) < checkTrueAccuracy(originalMatrix, originalBias, number)) &&
+        if((checkTrueAccuracy(mutationMatrix, mutationBias, number) > checkTrueAccuracy(originalMatrix, originalBias, number)) &&
                 (checkFalsePositiveAccuracy(mutationMatrix, mutationBias) < checkFalsePositiveAccuracy(originalMatrix, originalBias))){
             this.multiplierMatrix = mutationMatrix;
-            this.bias = mutationBias;
+            //this.bias = mutationBias;
             //System.out.println("hooray!");
         }
     }
