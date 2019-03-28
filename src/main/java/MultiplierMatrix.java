@@ -9,18 +9,24 @@ public class MultiplierMatrix {
     private double bias;
     private int number;
     private final String folderLocation = "/home/jake/ReadingNumbers/src/main/java/Matrices/MultiplierMatrix";
-    private String fileLocation;
+    private String multipliersFileLocation;
+    private String biasFileLocation;
 
     public MultiplierMatrix(int number) {
         this.number = number;
-        this.bias = 60;
-        fileLocation = folderLocation + number + ".json";
+        multipliersFileLocation = folderLocation + number + ".json";
+        biasFileLocation = folderLocation + number + "bias.json";
+
         ObjectMapper mapper = new ObjectMapper();
         try {
-            multiplierMatrix = mapper.readValue(new File(fileLocation), double[][].class);
+            multiplierMatrix = mapper.readValue(new File(multipliersFileLocation), double[][].class);
+            bias = mapper.readValue(new File(biasFileLocation), double.class);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
     }
 
     public double[][] getMultiplierMatrix() {
@@ -118,7 +124,7 @@ public class MultiplierMatrix {
                 (checkFalsePositiveAccuracy(mutationMatrix, mutationBias) < checkFalsePositiveAccuracy(originalMatrix, originalBias))){
             this.multiplierMatrix = mutationMatrix;
             this.bias = mutationBias;
-            System.out.println("hooray!");
+            //System.out.println("hooray!");
         }
     }
 
@@ -139,7 +145,7 @@ public class MultiplierMatrix {
     public void saveToDrive() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(fileLocation), multiplierMatrix);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(multipliersFileLocation), multiplierMatrix);
         } catch (IOException e) {
             e.printStackTrace();
         }
