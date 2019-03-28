@@ -13,6 +13,7 @@ public class MultiplierMatrix {
 
     public MultiplierMatrix(int number) {
         this.number = number;
+        this.bias = 60;
         fileLocation = folderLocation + number + ".json";
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -26,6 +27,9 @@ public class MultiplierMatrix {
         return multiplierMatrix;
     }
 
+    public double getBias() {
+        return bias;
+    }
 
     public void clear() {
         multiplierMatrix = new double[30][30];
@@ -42,10 +46,15 @@ public class MultiplierMatrix {
 
     //methods for optimization
     public static void randomMutation(double[][] inputMatrix) {
-        for (int x = 0; x < 10; x++) {
+        for (int x = 0; x < 100; x++) {
             int xVal = (int) (Math.random() * 30);
             int yVal = (int) (Math.random() * 30);
-            inputMatrix[xVal][yVal] += Math.random() - 0.5;
+            if(Math.abs(inputMatrix[xVal][yVal]) > 10) {
+                x--;
+            }
+            else {
+                inputMatrix[xVal][yVal] = (Math.random() - 0.5);
+            }
         }
     }
 
@@ -60,10 +69,18 @@ public class MultiplierMatrix {
         return sum;
     }
 
-    public static double checkAccuracy(double[][] multipliers, double bias, int number) throws IOException{
+    public static double checkTrueAccuracy(double[][] multipliers, double bias, int number) throws IOException{
         double productSum = 0;
-        for(int x = 0; x < 20; x++) {
-            productSum += (Math.random() > 0.5)? compareToNumber(multipliers, bias, number) : compareToFake(multipliers, bias);
+        for(int x = 0; x < 5; x++) {
+            productSum += compareToNumber(multipliers, bias, number);
+        }
+        return productSum;
+    }
+
+    public static double checkFalsePositiveAccuracy(double[][] multipliers, double bias) throws IOException{
+        double productSum = 0;
+        for(int x = 0; x < 10; x++) {
+            productSum += compareToFake(multipliers, bias);
         }
         return productSum;
     }
@@ -71,23 +88,38 @@ public class MultiplierMatrix {
 
     public static double compareToNumber(double[][] multipliers, double bias, int number) throws IOException {
         double productSum = getProduct(multipliers, ImageGetter.getRandomNumberImage(number));
+        //System.out.println(productSum);
         productSum = sigmoidFunction(productSum - bias);
         return 1 - productSum;
     }
 
     public static double compareToFake(double[][] multipliers, double bias) throws IOException{
         double productSum = getProduct(multipliers, ImageGetter.getRandomFakeImage());
+        //System.out.println(productSum);
         productSum = sigmoidFunction(productSum - bias);
         return productSum - 0;
     }
 
+    public static double getNumberIndex(int[][] image, double[][] multipliers, double bias) throws IOException{
+        double productSum = getProduct(multipliers, image);
+        productSum = sigmoidFunction(productSum - bias);
+        return productSum;
+    }
+
 
     public void genAndKill() throws IOException{
-        double[][] origionalMatrix = copyArray(multiplierMatrix);
+        double[][] originalMatrix = copyArray(multiplierMatrix);
         double[][] mutationMatrix = copyArray(multiplierMatrix);
+        double originalBias = bias;
+        double mutationBias = bias + Math.random() - 0.5;
         randomMutation(mutationMatrix);
-        multiplierMatrix = checkAccuracy(mutationMatrix, 0, number) > checkAccuracy(origionalMatrix, 0, number)?
-                mutationMatrix : origionalMatrix;
+
+        if((checkTrueAccuracy(mutationMatrix, mutationBias, number) < checkTrueAccuracy(originalMatrix, originalBias, number)) &&
+                (checkFalsePositiveAccuracy(mutationMatrix, mutationBias) < checkFalsePositiveAccuracy(originalMatrix, originalBias))){
+            this.multiplierMatrix = mutationMatrix;
+            this.bias = mutationBias;
+            System.out.println("hooray!");
+        }
     }
 
     public static double sigmoidFunction(double input) {

@@ -36,6 +36,13 @@ public class ImageGetter {
         }
     }
 
+    public static void printNicely(int[][] d) {
+        for(int x = 0; x < d.length; x++) {
+            System.out.println(Arrays.toString(d[x]));
+        }
+    }
+
+
     public static int[][] getRandomNumberImage(int number) throws IOException {
         String filePath = "/home/jake/ReadingNumbers/src/main/Numbers/";
         filePath += number + "/" + number + "." + (int) (Math.random()*11 + 1) + ".jpg";
