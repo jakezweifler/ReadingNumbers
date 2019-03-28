@@ -146,6 +146,7 @@ public class MultiplierMatrix {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(multipliersFileLocation), multiplierMatrix);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(new File(biasFileLocation), bias);
         } catch (IOException e) {
             e.printStackTrace();
         }

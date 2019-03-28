@@ -11,27 +11,28 @@ class Tester {
         MultiplierMatrix m3 = new MultiplierMatrix(3);
         //System.out.println(m3.getMultiplierMatrix().length);
         //m3.randomClear();
-        ImageGetter.printNicely(m3.getMultiplierMatrix());
-        System.out.println(MultiplierMatrix.getNumberIndex(ImageGetter.getRandomNumberImage(3), m3.getMultiplierMatrix(),20));
-        System.out.println(MultiplierMatrix.getNumberIndex(ImageGetter.getRandomFakeImage(), m3.getMultiplierMatrix(),20));
+
+        //ImageGetter.printNicely(m3.getMultiplierMatrix());
+        System.out.println(MultiplierMatrix.getNumberIndex(ImageGetter.getRandomNumberImage(3), m3.getMultiplierMatrix(),m3.getBias()));
+        System.out.println(MultiplierMatrix.getNumberIndex(ImageGetter.getRandomFakeImage(), m3.getMultiplierMatrix(), m3.getBias()));
 
 
         //ImageGetter.printNicely(polarize(m3.getMultiplierMatrix()));
 
-        for(int x = 0; x < 100; x++) {
+        for(int x = 0; x < 1000; x++) {
             m3.genAndKill();
+//            if(x%100 == 0) {
+//                m3.saveToDrive();
+//            }
             if(x%100 == 0) {
-                m3.saveToDrive();
-            }
-            if(x%10 == 0) {
-                int percent = x/10;
+                int percent = x/100;
                 System.out.println(percent + "% done.");
             }
 
         }
         m3.saveToDrive();
 
-        ImageGetter.printNicely(m3.getMultiplierMatrix());
+        //ImageGetter.printNicely(m3.getMultiplierMatrix());
 
 
 
